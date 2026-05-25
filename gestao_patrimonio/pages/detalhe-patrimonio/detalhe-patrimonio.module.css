@@ -1,0 +1,17 @@
+.pageDetalhes {
+    display: flex;
+    flex-direction: column;
+}
+
+.backLink {
+    color: var(--vermelho);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 46px;
+}
+
+.patrimonioCard {
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 48px 80px;
+}
