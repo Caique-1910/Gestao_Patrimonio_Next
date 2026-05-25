@@ -19,7 +19,7 @@
     display: block;
 }
 
-.menulist {
+.menuList {
     display: flex;
     list-style: none;
     gap: 180px;
@@ -71,4 +71,27 @@
 
 .hamburguer {
     display: none;
+}
+
+@media (max-width: 1200px) {
+
+    .hamburguer {
+        display: block;
+    }
+
+    .menuList,
+    .userArea {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .logo {
+        width: 100px;
+    }
+
+    .navbar {
+        width: 90%;
+    }
 }

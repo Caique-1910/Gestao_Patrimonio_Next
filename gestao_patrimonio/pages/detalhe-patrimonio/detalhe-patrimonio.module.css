@@ -1,3 +1,11 @@
+.pageContent {
+    min-height: calc(100vh - 66px);
+    padding: 52px 0 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .pageDetalhes {
     display: flex;
     flex-direction: column;
@@ -10,8 +18,194 @@
     margin-bottom: 46px;
 }
 
+#titulo-patrimonio {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
 .patrimonioCard {
     background-color: #ffffff;
     border-radius: 6px;
     padding: 48px 80px;
+}
+
+.patrimonioContent {
+    display: grid;
+    grid-template-columns: 1.6fr 0.7fr 1.1fr 1fr 1fr;
+    gap: 46px;
+    align-items: center;
+}
+
+.patrimonioContent dt {
+    color: var(--cinza-texto);
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.patrimonioContent dd {
+    color: var(--texto);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.patrimonioContent dl:first-child dd {
+    max-width: 230px;
+}
+
+/* HISTÓRICO */
+
+.tableSection {
+    margin-top: 40px;
+}
+
+.tableSection h2 {
+    font-size: 24px;
+    margin-bottom: 48px;
+}
+
+.historyTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 32px;
+}
+
+.historyTable th {
+    padding: 0 24px 12px;
+    border-bottom: 1px solid #c4c8ce;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--cinza-texto);
+}
+
+.historyTable td {
+    background-color: #ffffff;
+    padding: 24px;
+    text-align: center;
+    font-size: 15px;
+    color: #000000;
+}
+
+.historyTable tbody tr td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.historyTable tbody tr td:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 10px 26px;
+    border-radius: 10px;
+    background-color: #ccffe0;
+    color: #00851c;
+}
+
+.historyTable a {
+    color: var(--vermelho);
+    font-size: 20px;
+}
+
+/* PAGINAÇÃO */
+
+.pagination {
+    display: none;
+}
+
+@media (max-width: 1200px) {
+
+    .pageContent {
+        padding: 38px 0 60px;
+    }
+
+    .backLink {
+        font-size: 18px;
+        margin-bottom: 32px;
+    }
+
+    #titulo-patrimonio {
+        font-size: 22px;
+    }
+
+    .patrimonioCard {
+        padding: 28px;
+    }
+
+    .patrimonioContent {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .tableSection h2 {
+        margin-bottom: 24px;
+    }
+
+    .historyTable,
+    .historyTable thead,
+    .historyTable tbody,
+    .historyTable tr,
+    .historyTable th,
+    .historyTable td {
+        display: block;
+        width: 100%;
+    }
+
+    .historyTable thead {
+        display: none;
+    }
+
+    .historyTable {
+        border-spacing: 0;
+    }
+
+    .historyTable tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .historyTable tr {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .historyTable td {
+        background-color: transparent;
+        padding: 10px 0;
+        text-align: left;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .historyTable td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #111111;
+    }
+
+    .historyTable tbody tr td:first-child,
+    .historyTable tbody tr td:last-child {
+        border-radius: 0;
+    }
+
+    .statusBadge {
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .patrimonioCard {
+        padding: 22px;
+    }
+
+    .historyTable td {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
