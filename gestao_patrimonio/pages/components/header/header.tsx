@@ -1,11 +1,12 @@
 import styles from "./header.module.css"
+import Link from 'next/link';
 
 const Header = () => {
     return (
         <>
             <header className={styles.topbar}>
                 <nav
-                    className={`${styles.navbar} ${styles.layoutGuide}`}
+                    className={`${styles.navbar} ${styles.layout_guide}`}
                     aria-label="Menu principal"
                 >
                     <a
@@ -26,18 +27,15 @@ const Header = () => {
                                 href="#"
                                 className={styles.menuLink}
                             >
-                                Ambientes
+                                Locais
                                 <i className="fa-solid fa-chevron-down" />
                             </a>
                         </li>
 
                         <li>
-                            <a
-                                href="#"
-                                className={styles.menuLink}
-                            >
+                            <Link href="/patrimonio-por-sala" className={styles.menuLink}>
                                 Patrimônios
-                            </a>
+                            </Link>
                         </li>
                     </ul>
 
@@ -61,7 +59,7 @@ const Header = () => {
                             className={styles.arrowButton}
                             aria-label="Abrir opções da conta"
                         >
-                            <i className="fa-solid fa-chevron-down" />
+                            <img src="../imgs/chevron-down.png" alt="" />
                         </button>
                     </section>
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Header from "../components/header/header";
 import styles from "./detalhe-patrimonio.module.css";
 
@@ -11,10 +12,10 @@ const DetalhePatrimonio = () => {
                     className={`${styles.pageDetalhes} ${styles.layoutGuide}`}
                     aria-labelledby="titulo-patrimonio"
                 >
-                    <a href="#" className={styles.backLink}>
+                    <Link href="/patrimonio-por-sala" className={styles.backLink}>
                         <i className="fa-solid fa-arrow-left" />
                         Voltar
-                    </a>
+                    </Link>
 
                     <h1 id="titulo-patrimonio">
                         Patrimônio: 1236808

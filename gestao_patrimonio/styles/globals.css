@@ -16,7 +16,7 @@
 }
 
 .layout_guide{
-    width: 80%;
+    width: min(80%, 1520px);
 }
 
 body {

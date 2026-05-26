@@ -1,6 +1,36 @@
+import { useState } from "react"
 import styles from "./login.module.css"
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import { login } from "../api/authService";
 
 const Login = () => {
+
+    const [nif, setNif] = useState<string>("");
+    const [senha, setSenha] = useState<string>("");
+
+    const router = useRouter();
+
+    const noticicacao = (msg: string) => toast.success(msg);
+    const erro = (msg: string) => toast.error(msg);
+
+    async function autenticar(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        try {
+            await login(nif, senha);
+
+            noticicacao("Login efetuado");
+
+            setTimeout(() => {
+                router.push("/lista-local")
+            }, 2000);
+
+        } catch (error: any) {
+            erro(error.message)
+        }
+    }
+
+
     return (
         <>
             <main className={styles.loginPage}>
@@ -35,7 +65,7 @@ const Login = () => {
                     className={styles.loginArea}
                     aria-label="Formulário de login"
                 >
-                    <form className={styles.loginForm}>
+                    <form className={styles.loginForm} onSubmit={autenticar}>
                         <h1>Login</h1>
 
                         <div className={styles.formGroup}>
@@ -47,6 +77,8 @@ const Login = () => {
                                 name="nif"
                                 placeholder="Insira o seu NIF"
                                 required
+                                value={nif}
+                                onChange={(e) => setNif(e.target.value)}
                             />
                         </div>
 
@@ -60,10 +92,12 @@ const Login = () => {
                                     name="senha"
                                     placeholder="Insira a sua senha"
                                     required
+                                    value={senha}
+                                    onChange={(e) => setSenha(e.target.value)}
                                 />
 
                                 <button
-                                    type="button"
+                                    
                                     className={styles.showPassword}
                                     aria-label="Mostrar senha"
                                 >

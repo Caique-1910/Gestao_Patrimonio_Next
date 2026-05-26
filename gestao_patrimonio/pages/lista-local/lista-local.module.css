@@ -1,0 +1,84 @@
+.pageContent {
+    min-height: calc(100vh - 78px);
+    padding: 100px 0;
+    background-color: var(--cor-fundo);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+/* ========================= */
+/* RESPONSIVIDADE TABLET */
+/* ========================= */
+
+@media (max-width: 1200px) {
+
+    .layoutGuide {
+        width: 90%;
+    }
+
+    .menuList,
+    .userArea {
+        display: none;
+    }
+
+    .hamburguer {
+        display: block;
+    }
+
+    .pageHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    .searchArea {
+        width: 100%;
+    }
+
+    .searchArea input {
+        width: 100%;
+    }
+}
+
+/* ========================= */
+/* RESPONSIVIDADE MOBILE */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+    .topbar {
+        padding: 18px 0;
+        height: auto;
+    }
+
+    .layoutGuide {
+        width: 92%;
+    }
+
+    .pageContent {
+        padding: 50px 0;
+    }
+
+    .pageHeader h1 {
+        font-size: 28px;
+    }
+
+    .searchArea {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .searchArea input {
+        width: 100%;
+    }
+
+    .filterButton {
+        width: 100%;
+    }
+
+}
