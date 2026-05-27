@@ -1,3 +1,225 @@
+.tableSection {
+    margin-top: 40px;
+    overflow-x: auto;
+    width: 70%;
+}
+
+.environmentTable {
+    width: 70%;
+    border-collapse: separate;
+    border-spacing: 0 32px;
+}
+
+.environmentTable th {
+    font-weight: 400;
+    color: var(--cor-texto);
+    padding-bottom: 16px;
+    border-bottom: 1px solid #cfd4da;
+    text-align: center;
+}
+
+.environmentTable td {
+    background-color: #ffffff;
+    padding: 34px 24px;
+    text-align: center;
+    color: var(--cor-cinza);
+    font-size: 18px;
+}
+
+.environmentTable tbody tr td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.environmentTable tbody tr td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+.environmentTable a {
+    color: #d71920;
+    font-size: 22px;
+}
+
+.environmentTable tr.disabled a {
+    color: #e8a4a4;
+}
+
+.pagination {
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.paginationButton,
+.paginationLink {
+    font-family: inherit;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    font-size: 22px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.paginationButton {
+    border: 1px solid #9fa3a8;
+    background-color: transparent;
+    color: #9fa3a8;
+    cursor: pointer;
+}
+
+.paginationLink {
+    font-weight: 700;
+}
+
+.paginationLink.current {
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
+.searchArea input:focus,
+.filterButton:focus,
+.userIcon:focus,
+.arrowButton:focus,
+.hamburguer:focus,
+.paginationButton:focus,
+.paginationLink:focus,
+.environmentTable a:focus {
+    outline: 3px solid rgba(207, 41, 41, 0.35);
+    outline-offset: 3px;
+}
+
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+
+@media (max-width: 1200px) {
+
+    .layoutGuide {
+        width: 90%;
+    }
+
+    .menuList,
+    .userArea {
+        display: none;
+    }
+
+    .hamburguer {
+        display: block;
+    }
+
+    .pageHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    .searchArea {
+        width: 100%;
+    }
+
+    .searchArea input {
+        width: 100%;
+    }
+}
+
+/* ========================= */
+/* RESPONSIVIDADE MOBILE */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+    /* ========================= */
+    /* TABELA RESPONSIVA REAL */
+    /* ========================= */
+
+    .environmentTable,
+    .environmentTable thead,
+    .environmentTable tbody,
+    .environmentTable th,
+    .environmentTable td,
+    .environmentTable tr {
+        display: block;
+        width: 100%;
+    }
+
+    .environmentTable {
+        border-spacing: 0;
+    }
+
+    .environmentTable thead {
+        display: none;
+    }
+
+    .environmentTable tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .environmentTable tr {
+        background-color: #ffffff;
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .environmentTable td {
+        border: none;
+        background-color: transparent;
+        padding: 10px 0;
+        text-align: left;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        gap: 20px;
+
+        font-size: 15px;
+    }
+
+    .environmentTable td::before {
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .environmentTable td:nth-child(1)::before {
+        content: "Local";
+    }
+
+    .environmentTable td:nth-child(2)::before {
+        content: "Responsável";
+    }
+
+    .environmentTable td:nth-child(3)::before {
+        content: "Detalhes";
+    }
+
+    .environmentTable tbody tr td:first-child,
+    .environmentTable tbody tr td:last-child {
+        border-radius: 0;
+    }
+
+    .environmentTable td a {
+        font-size: 20px;
+    }
+
+    .pagination {
+        margin-top: 50px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}
 
 .pageHeader {
     display: flex;

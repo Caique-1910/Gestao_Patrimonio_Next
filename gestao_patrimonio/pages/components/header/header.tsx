@@ -1,7 +1,33 @@
+import { useEffect, useState } from "react";
 import styles from "./header.module.css"
 import Link from 'next/link';
+import { listarLocalidades } from "@/pages/api/localService";
+import { useRouter } from "next/router";
+
+interface Localizacao {
+    localizacaoID: number,
+    nomeLocal: string,
+    localSAP: string,
+    descricaoSAP: string
+}
+
 
 const Header = () => {
+
+    const [local, setLocais] = useState<Localizacao[]>([]);
+    const [localSelecionado, setLocaisSelecionado] = useState<number>(1);
+
+    const router = useRouter();
+
+    async function listarLocais() {
+        const lista = await listarLocalidades();
+        setLocais(lista.data)
+    }
+
+    useEffect(() => {
+        listarLocais();
+    }, [router.isReady])
+
     return (
         <>
             <header className={styles.topbar}>
@@ -21,23 +47,33 @@ const Header = () => {
                         />
                     </a>
 
-                    <ul className={styles.menuList}>
-                        <li>
-                            <a
-                                href="#"
-                                className={styles.menuLink}
-                            >
+                    <select className={styles.menuList} value={localSelecionado} onChange={(e) => setLocaisSelecionado(Number(e.target.value))}>
+                        <option value="">
+                            <Link href="/lista-local">
                                 Locais
-                                <i className="fa-solid fa-chevron-down" />
-                            </a>
-                        </li>
-
-                        <li>
-                            <Link href="/patrimonio-por-sala" className={styles.menuLink}>
-                                Patrimônios
                             </Link>
-                        </li>
-                    </ul>
+                        </option>
+
+                        {local.map((item) => (
+                            <option
+                                className={styles.option}
+                                key={item.localizacaoID}
+                                value={item.localizacaoID}
+                            >
+                                <Link
+                                    href='/lista-local/'
+                                >
+                                    {item.nomeLocal}
+                                    <i className="fa-solid fa-chevron-down" />
+                                </Link>
+                            </option>
+                        ))}
+                    </select>
+
+                    <Link href="/patrimonio-por-sala" className={styles.menuLink}>
+                        Patrimônios
+                    </Link>
+
 
                     <section
                         className={styles.userArea}
@@ -70,7 +106,7 @@ const Header = () => {
                         <i className="fa-solid fa-bars" />
                     </button>
                 </nav>
-            </header>
+            </header >
         </>
     )
 }

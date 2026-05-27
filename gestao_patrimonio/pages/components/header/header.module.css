@@ -22,6 +22,11 @@
 .menuList {
     display: flex;
     list-style: none;
+    background-color: var(--cor-vermelha);
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
     gap: 180px;
 }
 
@@ -29,7 +34,14 @@
     color: #ffffff;
     font-size: 16px;
     font-weight: 700;
+    text-decoration: none;
 }
+
+.option{
+    background-color: var(--cor-vermelha);
+
+}
+
 
 .userArea {
     display: flex;

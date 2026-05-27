@@ -1,82 +1,35 @@
+import { useRouter } from "next/router";
 import styles from "./tabela-local.module.css"
 
-const TabelaLocal = () => {
-    return(
+type Dados = {
+    nomeLocal: string,
+    usuarioID: number
+    nome: string
+}
+
+const TabelaLocal = ({ nomeLocal, usuarioID, nome }: Dados) => {
+
+
+    return (
         <>
-             <section
-                    className={`${styles.tableSection} ${styles.layout_guide}`}
-                    aria-label="Lista de ambientes"
-                >
-                    <table className={styles.environmentTable}>
-                        <thead>
-                            <tr>
-                                <th>Local</th>
-                                <th>Responsável</th>
-                                <th>Detalhes</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
-                            <tr>
-                                <td>Sala 30/31 (anfiteatro)</td>
+            <tr>
+                <td>{nomeLocal}</td>
 
-                                <td>Samanta Melissa</td>
+                <td key={usuarioID}>{nome}</td>
 
-                                <td>
-                                    <a
-                                        href="#"
-                                        aria-label="Ver detalhes da Sala 30/31"
-                                    >
-                                        <i className="fa-solid fa-circle-info" />
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <nav
-                    className={styles.pagination}
-                    aria-label="Paginação"
-                >
-                    <button
-                        type="button"
-                        className={styles.paginationButton}
-                        aria-label="Página anterior"
-                    >
-                        ‹
-                    </button>
-
+                <td>
                     <a
                         href="#"
-                        className={`${styles.paginationLink} ${styles.current}`}
-                        aria-current="page"
+                        aria-label="Ver detalhes da Sala 30/31"
                     >
-                        1
+                        <i className="fa-solid fa-circle-info" />
                     </a>
+                </td>
+            </tr>
 
-                    <a
-                        href="#"
-                        className={styles.paginationLink}
-                    >
-                        2
-                    </a>
 
-                    <a
-                        href="#"
-                        className={styles.paginationLink}
-                    >
-                        3
-                    </a>
 
-                    <button
-                        type="button"
-                        className={styles.paginationButton}
-                        aria-label="Próxima página"
-                    >
-                        ›
-                    </button>
-                </nav>
         </>
     )
 }

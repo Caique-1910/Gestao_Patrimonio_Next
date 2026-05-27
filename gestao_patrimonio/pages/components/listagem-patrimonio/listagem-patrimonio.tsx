@@ -1,25 +1,23 @@
-import { useState } from "react";
-import TabelaLocal from "../tabela-local/tabela-local";
-import styles from "./listagem-local.module.css"
-import Link from 'next/link';
+import TabelaPatrimonio from "../tabela-patrimonio/tabela-patrimonio";
+import styles from "./listagem-patrimonio.module.css"
 
 type Localizacao = {
     nomeLocal: string,
-    usuarioID: number,
-    nome: string
+    usuarioID: number
 }
 
-const ListagemLocal = () => {
-    const [localizacao, setLocalizacao] = useState<Localizacao[]> ([]);
+
+const ListagemPatrimonio = () => {
+
 
     return (
         <>
             <section
                 className={`${styles.pageHeader} ${styles.layout_guide}`}
-                aria-labelledby="titulo-ambientes"
+                aria-labelledby="titulo-patrimonios"
             >
-                <h1 id="titulo-ambientes">
-                    Locais
+                <h1 id="titulo-patrimonios">
+                    Patrimônios: Sala 09/10
                 </h1>
 
                 <form
@@ -30,7 +28,7 @@ const ListagemLocal = () => {
                         htmlFor="pesquisa-ambiente"
                         className={styles.srOnly}
                     >
-                        Pesquisar local
+                        Pesquisar patrimônios
                     </label>
 
                     <input
@@ -40,45 +38,32 @@ const ListagemLocal = () => {
                         placeholder="Pesquise o local"
                     />
 
-                    <Link href="/modal">
-                        <button type="button" className={styles.add_button} aria-label="Adicionar patrimônios">
-                            <i className="fa-solid fa-plus" /> Patrimônio
-                        </button>
-                    </Link>
-
                     <button
                         type="button"
                         className={styles.filterButton}
-                        aria-label="Filtrar ambientes"
+                        aria-label="Filtrar patrimonios"
                     >
                         <i className="fa-solid fa-sliders" />
                     </button>
                 </form>
-            </section>
 
+            </section>
             <table className={styles.environmentTable}>
                 <thead>
                     <tr>
-                        <th>Local</th>
-                        <th>Responsável</th>
-                        <th>Detalhes</th>
+                        <th>Patrimônio</th>
+                        <th>Denominação</th>
+                        <th>Data transfêrencia</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {localizacao.map((item) => (
-                        
-                        <TabelaLocal
-                            nomeLocal={item.nomeLocal}
-                            usuarioID={item.usuarioID}
-                            nome={item.nome}
-                        />
-                    ))
-                    }
-                </tbody>
 
+                <tbody>
+                    <TabelaPatrimonio/>
+                </tbody>
             </table>
 
-              <nav
+            <nav
                 className={styles.pagination}
                 aria-label="Paginação"
             >
@@ -121,10 +106,8 @@ const ListagemLocal = () => {
                 </button>
             </nav>
 
-        
         </>
     )
 }
 
-
-export default ListagemLocal;
+export default ListagemPatrimonio;
