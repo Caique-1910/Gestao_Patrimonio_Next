@@ -3,30 +3,76 @@ import styles from "./header.module.css"
 import Link from 'next/link';
 import { listarLocalidades } from "@/pages/api/localService";
 import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
+import { login, puxarInformacoesUsuarioLogado } from "@/pages/api/authService";
 
 interface Localizacao {
-    localizacaoID: number,
+    localizacaoID: string,
     nomeLocal: string,
     localSAP: string,
     descricaoSAP: string
+}
+
+interface Usuario {
+    usuarioID: string,
+    email: string,
+    nome: string
 }
 
 
 const Header = () => {
 
     const [local, setLocais] = useState<Localizacao[]>([]);
-    const [localSelecionado, setLocaisSelecionado] = useState<number>(1);
+    const [localSelecionado, setLocaisSelecionado] = useState<string>("");
+
+    const [usuario, setUsuario] = useState<Usuario | null>(null);
 
     const router = useRouter();
+    const params = useParams();
+    const id = params?.id;
+
 
     async function listarLocais() {
         const lista = await listarLocalidades();
         setLocais(lista.data)
     }
 
+    const opcaoSelecionada = (
+        event: React.ChangeEvent<HTMLSelectElement>
+    ) => {
+
+        const id = event.target.value;
+
+        setLocaisSelecionado(id);
+
+        if (id !== "") {
+            router.push(`/lista-local/${id}`);
+        }
+        else {
+            router.push(`/lista-local/locais`)
+        }
+    }
+
+
     useEffect(() => {
-        listarLocais();
-    }, [router.isReady])
+
+        async function carregarUsuario() {
+            listarLocais()
+            try {
+
+                const dadosUsuario =
+                    await puxarInformacoesUsuarioLogado();
+
+                setUsuario(dadosUsuario);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        carregarUsuario();
+
+    }, [router.isReady, id]);
 
     return (
         <>
@@ -47,9 +93,9 @@ const Header = () => {
                         />
                     </a>
 
-                    <select className={styles.menuList} value={localSelecionado} onChange={(e) => setLocaisSelecionado(Number(e.target.value))}>
-                        <option value="">
-                            <Link href="/lista-local">
+                    <select className={styles.menuList} value={localSelecionado} onChange={opcaoSelecionada}>
+                        <option value="locais">
+                            <Link href="/lista-local/locais">
                                 Locais
                             </Link>
                         </option>
@@ -61,7 +107,7 @@ const Header = () => {
                                 value={item.localizacaoID}
                             >
                                 <Link
-                                    href='/lista-local/'
+                                    href={`/lista-local/${item.localizacaoID}`}
                                 >
                                     {item.nomeLocal}
                                     <i className="fa-solid fa-chevron-down" />
@@ -87,8 +133,8 @@ const Header = () => {
                         </button>
 
                         <div className={styles.userInfo}>
-                            <strong>Késsia Milena</strong>
-                            <span>kessia@sp.senai.br</span>
+                            <strong>{usuario?.nome}</strong>
+                            <span>{usuario?.email}</span>
                         </div>
 
                         <button

@@ -2,19 +2,20 @@ import { useRouter } from "next/router";
 import styles from "./tabela-local.module.css"
 
 type Dados = {
+    localizacaoID : string,
     nomeLocal: string,
-    usuarioID: number
+    usuarioID: string,
     nome: string
 }
 
-const TabelaLocal = ({ nomeLocal, usuarioID, nome }: Dados) => {
+const TabelaLocal = ({ localizacaoID,nomeLocal, usuarioID, nome }: Dados) => {
 
 
     return (
         <>
 
             <tr>
-                <td>{nomeLocal}</td>
+                <td key={localizacaoID}>{nomeLocal}</td>
 
                 <td key={usuarioID}>{nome}</td>
 
@@ -27,7 +28,6 @@ const TabelaLocal = ({ nomeLocal, usuarioID, nome }: Dados) => {
                     </a>
                 </td>
             </tr>
-
 
 
         </>
