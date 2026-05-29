@@ -1,32 +1,78 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TabelaLocal from "../tabela-local/tabela-local";
 import styles from "./listagem-local.module.css"
 import Link from 'next/link';
-import { useParams, usePathname } from "next/navigation";
+import { listarLocalidades } from "@/pages/api/localService";
 
-type Localizacao = {
+
+interface Local {
     localizacaoID: string,
     nomeLocal: string,
     usuarioID: string,
-    nome: string
+    nome: string,
+    areaID: string
+    nomeArea: string
 }
 
 const ListagemLocal = () => {
-    const [localizacao, setLocalizacao] = useState<Localizacao[]> ([]);
+    const [localizacao, setLocalizacao] = useState<Local[]>([]);
 
-    const [pesquisa, setPesquisa] = useState<string>("")
+    const [pesquisa, setPesquisa] = useState<string>("");
 
-    const params = useParams();
-    const id = params?.id;
 
-    const pathname = usePathname();
+    async function listar() {
+        try {
+            const lista = await listarLocalidades();
+            setLocalizacao(lista);
+        }
+        catch (error: any) {
+            console.log(error.message);
+        }
+    }
 
-   
+    const [paginaAtual, setPaginaAtual] = useState<number>(1);
+
+    const itensPorPagina = 70;
+
+    const indiceUltimoItem = paginaAtual * itensPorPagina;
+
+    const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
+
+
+
+    const locaisFiltrados = localizacao.filter(
+        (localizacao) => {
+
+            return localizacao.nomeLocal
+                .toLowerCase()
+                .includes(
+                    pesquisa.toLowerCase()
+                );
+        }
+    );
+
+    const locaisPaginados =
+        locaisFiltrados.slice(
+            indicePrimeiroItem,
+            indiceUltimoItem
+        );
+
+    const totalPaginas = Math.ceil(
+        locaisFiltrados.length /
+        itensPorPagina
+    );
+
+
+    useEffect(() => {
+        listar();
+    }, [])
+
+
 
     return (
         <>
-            {pathname  === "/lista-local/locais" ? (
-                <section
+
+            <section
                 className={`${styles.pageHeader} ${styles.layout_guide}`}
                 aria-labelledby="titulo-ambientes"
             >
@@ -48,15 +94,13 @@ const ListagemLocal = () => {
                     <input
                         type="search"
                         id="pesquisa-ambiente"
+                        value={pesquisa}
+                        onChange={(e) => { setPesquisa(e.target.value) }}
                         name="pesquisaAmbiente"
                         placeholder="Pesquise o local"
                     />
 
-                    <Link href="/modal">
-                        <button type="button" className={styles.add_button} aria-label="Adicionar patrimônios">
-                            <i className="fa-solid fa-plus" /> Patrimônio
-                        </button>
-                    </Link>
+                
 
                     <button
                         type="button"
@@ -67,121 +111,100 @@ const ListagemLocal = () => {
                     </button>
                 </form>
             </section>
-
-            ) : pathname === `/lista-local/${id}` ? (
-                 <section
-                className={`${styles.pageHeader} ${styles.layout_guide}`}
-                aria-labelledby="titulo-ambientes"
-            >
-                <h1 id="titulo-ambientes">
-                    Locais
-                </h1>
-
-                <form
-                    className={styles.searchArea}
-                    role="search"
-                >
-                    <label
-                        htmlFor="pesquisa-ambiente"
-                        className={styles.srOnly}
-                    >
-                        Pesquisar local
-                    </label>
-
-                    <input
-                        type="search"
-                        id="pesquisa-ambiente"
-                        name="pesquisaAmbiente"
-                        placeholder="Pesquise o local"
-                    />
-
-                    <Link href="/modal">
-                        <button type="button" className={styles.add_button} aria-label="Adicionar patrimônios">
-                            <i className="fa-solid fa-plus" /> Patrimônio
-                        </button>
-                    </Link>
-
-                    <button
-                        type="button"
-                        className={styles.filterButton}
-                        aria-label="Filtrar ambientes"
-                    >
-                        <i className="fa-solid fa-sliders" />
-                    </button>
-                </form>
-            </section>
-
-            ) : null}
-           
 
             <table className={styles.environmentTable}>
                 <thead>
                     <tr>
                         <th>Local</th>
+                        <th>Área</th>
                         <th>Responsável</th>
-                        <th>Detalhes</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {localizacao.map((item) => (
-                        
-                        <TabelaLocal
-                            key={item.localizacaoID}
+                    {locaisPaginados.length > 0 ? (
+                        locaisPaginados.map((item) => (
+
+                            <TabelaLocal
+                             key={item.localizacaoID}
                             localizacaoID={item.localizacaoID}
                             nomeLocal={item.nomeLocal}
                             usuarioID={item.usuarioID}
                             nome={item.nome}
-                        />
-                    ))
-                    }
+                            areaID={item.areaID}
+                            nomeArea={item.nomeArea}
+                            />
+
+                        ))
+                    ) : null} 
+                   
+
                 </tbody>
 
             </table>
 
-              <nav
+
+            <nav
                 className={styles.pagination}
                 aria-label="Paginação"
             >
+
                 <button
                     type="button"
                     className={styles.paginationButton}
-                    aria-label="Página anterior"
+                    disabled={paginaAtual === 1}
+                    onClick={() =>
+                        setPaginaAtual(
+                            paginaAtual - 1
+                        )
+                    }
                 >
                     ‹
                 </button>
 
-                <a
-                    href="#"
-                    className={`${styles.paginationLink} ${styles.current}`}
-                    aria-current="page"
-                >
-                    1
-                </a>
+                {[...Array(totalPaginas)].map(
+                    (_, index) => {
 
-                <a
-                    href="#"
-                    className={styles.paginationLink}
-                >
-                    2
-                </a>
+                        const numeroPagina =
+                            index + 1;
 
-                <a
-                    href="#"
-                    className={styles.paginationLink}
-                >
-                    3
-                </a>
+                        return (
+
+                            <button
+                                key={numeroPagina}
+                                type="button"
+                                className={
+                                    paginaAtual === numeroPagina
+                                        ? `${styles.paginationLink} ${styles.current}`
+                                        : styles.paginationLink
+                                }
+                                onClick={() =>
+                                    setPaginaAtual(
+                                        numeroPagina
+                                    )
+                                }
+                            >
+                                {numeroPagina}
+                            </button>
+                        );
+                    }
+                )}
 
                 <button
                     type="button"
                     className={styles.paginationButton}
-                    aria-label="Próxima página"
+                    disabled={
+                        paginaAtual === totalPaginas
+                    }
+                    onClick={() =>
+                        setPaginaAtual(
+                            paginaAtual + 1
+                        )
+                    }
                 >
                     ›
                 </button>
-            </nav>
 
-        
+            </nav>
         </>
     )
 }

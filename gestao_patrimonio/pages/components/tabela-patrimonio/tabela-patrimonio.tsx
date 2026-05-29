@@ -1,20 +1,28 @@
 import styles from "./tabela-patrimonio.module.css"
 import Link from "next/link";
 
-const TabelaPatrimonio = () => {
+interface Dados{
+    patrimonioID: string,
+    numeroPatrimonio:string,
+    denominacao: string,
+    dataTransferencia: string
+}
+
+
+const TabelaPatrimonio = ({patrimonioID, numeroPatrimonio, denominacao, dataTransferencia}:Dados) => {
     return(
         <>
             
-                            <tr>
-                                <td>1236808</td>
+                            <tr key={patrimonioID}>
+                                <td>{numeroPatrimonio}</td>
 
                                 <td>
-                                    MESA TRAPEZOIDAL DC-1987a
+                                    {denominacao}
                                 </td>
 
-                                <td>Mesa</td>
+                                <td>{dataTransferencia}</td>
 
-                                <td>11/02/26</td>
+                                
 
                                 <td>
                                     <div className={styles.div_acoes}>

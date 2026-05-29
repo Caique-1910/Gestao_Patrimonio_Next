@@ -22,7 +22,7 @@ const Login = () => {
             noticicacao("Login efetuado");
 
             setTimeout(() => {
-                router.push("/lista-local/locais")
+                router.push("/lista-local")
             }, 2000);
 
         } catch (error: any) {

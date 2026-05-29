@@ -1,14 +1,67 @@
+import { useEffect, useState } from "react";
 import TabelaPatrimonio from "../tabela-patrimonio/tabela-patrimonio";
 import styles from "./listagem-patrimonio.module.css"
+import { listarPatrimonio } from "@/pages/api/patrimonioService";
+import Link from "next/link";
 
-type Localizacao = {
-    nomeLocal: string,
-    usuarioID: number
+interface Dados {
+    patrimonioID: string,
+    numeroPatrimonio: string,
+    denominacao: string,
+    dataTransferencia: string
 }
 
 
 const ListagemPatrimonio = () => {
+    const [patrimonio, setPatrimonio] = useState<Dados[]>([]);
+    const [pesquisa, setPesquisa] = useState<string>("")
+    const [paginaAtual, setPaginaAtual] = useState<number>(1);
 
+    const itensPorPagina = 70;
+
+    const indiceUltimoItem = paginaAtual * itensPorPagina;
+
+    const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
+
+
+
+    const patrimoniosFiltrados = patrimonio.filter(
+        (patrimonio) => {
+
+            return patrimonio.denominacao
+                .toLowerCase()
+                .includes(
+                    pesquisa.toLowerCase()
+                );
+        }
+    );
+
+    const patrimoniosPaginados =
+        patrimoniosFiltrados.slice(
+            indicePrimeiroItem,
+            indiceUltimoItem
+        );
+
+    const totalPaginas = Math.ceil(
+        patrimoniosFiltrados.length /
+        itensPorPagina
+    );
+
+    async function listar() {
+        try {
+            const lista = await listarPatrimonio();
+            setPatrimonio(lista);
+        }
+        catch (error: any) {
+            console.log(error.message);
+        }
+    }
+
+
+
+    useEffect(() => {
+        listar()
+    }, [])
 
     return (
         <>
@@ -35,8 +88,16 @@ const ListagemPatrimonio = () => {
                         type="search"
                         id="pesquisa-ambiente"
                         name="pesquisaAmbiente"
-                        placeholder="Pesquise o local"
+                        placeholder="Pesquise o patrimonio"
+                        value={pesquisa}
+                        onChange={(e) => { setPesquisa(e.target.value) }}
                     />
+
+                        <Link href="/modal">
+                        <button type="button" className={styles.add_button} aria-label="Adicionar patrimônios">
+                            <i className="fa-solid fa-plus" /> Patrimônio
+                        </button>
+                    </Link>
 
                     <button
                         type="button"
@@ -59,7 +120,19 @@ const ListagemPatrimonio = () => {
                 </thead>
 
                 <tbody>
-                    <TabelaPatrimonio/>
+                    {patrimoniosPaginados.length > 0 ? (
+                        patrimoniosPaginados.map((item) => (
+
+                            <TabelaPatrimonio
+                                key={item.patrimonioID}
+                                patrimonioID={item.patrimonioID}
+                                denominacao={item.denominacao}
+                                dataTransferencia={item.dataTransferencia}
+                                numeroPatrimonio={item.numeroPatrimonio}
+                            />
+
+                        ))
+                    ) : null}
                 </tbody>
             </table>
 
@@ -67,43 +140,63 @@ const ListagemPatrimonio = () => {
                 className={styles.pagination}
                 aria-label="Paginação"
             >
+
                 <button
                     type="button"
                     className={styles.paginationButton}
-                    aria-label="Página anterior"
+                    disabled={paginaAtual === 1}
+                    onClick={() =>
+                        setPaginaAtual(
+                            paginaAtual - 1
+                        )
+                    }
                 >
                     ‹
                 </button>
 
-                <a
-                    href="#"
-                    className={`${styles.paginationLink} ${styles.current}`}
-                    aria-current="page"
-                >
-                    1
-                </a>
+                {[...Array(totalPaginas)].map(
+                    (_, index) => {
 
-                <a
-                    href="#"
-                    className={styles.paginationLink}
-                >
-                    2
-                </a>
+                        const numeroPagina =
+                            index + 1;
 
-                <a
-                    href="#"
-                    className={styles.paginationLink}
-                >
-                    3
-                </a>
+                        return (
+
+                            <button
+                                key={numeroPagina}
+                                type="button"
+                                className={
+                                    paginaAtual === numeroPagina
+                                        ? `${styles.paginationLink} ${styles.current}`
+                                        : styles.paginationLink
+                                }
+                                onClick={() =>
+                                    setPaginaAtual(
+                                        numeroPagina
+                                    )
+                                }
+                            >
+                                {numeroPagina}
+                            </button>
+                        );
+                    }
+                )}
 
                 <button
                     type="button"
                     className={styles.paginationButton}
-                    aria-label="Próxima página"
+                    disabled={
+                        paginaAtual === totalPaginas
+                    }
+                    onClick={() =>
+                        setPaginaAtual(
+                            paginaAtual + 1
+                        )
+                    }
                 >
                     ›
                 </button>
+
             </nav>
 
         </>

@@ -1,17 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./header.module.css"
 import Link from 'next/link';
-import { listarLocalidades } from "@/pages/api/localService";
-import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
-import { login, puxarInformacoesUsuarioLogado } from "@/pages/api/authService";
-
-interface Localizacao {
-    localizacaoID: string,
-    nomeLocal: string,
-    localSAP: string,
-    descricaoSAP: string
-}
+import {  puxarInformacoesUsuarioLogado } from "@/pages/api/authService";
 
 interface Usuario {
     usuarioID: string,
@@ -22,47 +12,16 @@ interface Usuario {
 
 const Header = () => {
 
-    const [local, setLocais] = useState<Localizacao[]>([]);
-    const [localSelecionado, setLocaisSelecionado] = useState<string>("");
 
     const [usuario, setUsuario] = useState<Usuario | null>(null);
-
-    const router = useRouter();
-    const params = useParams();
-    const id = params?.id;
-
-
-    async function listarLocais() {
-        const lista = await listarLocalidades();
-        setLocais(lista.data)
-    }
-
-    const opcaoSelecionada = (
-        event: React.ChangeEvent<HTMLSelectElement>
-    ) => {
-
-        const id = event.target.value;
-
-        setLocaisSelecionado(id);
-
-        if (id !== "") {
-            router.push(`/lista-local/${id}`);
-        }
-        else {
-            router.push(`/lista-local/locais`)
-        }
-    }
 
 
     useEffect(() => {
 
         async function carregarUsuario() {
-            listarLocais()
             try {
 
-                const dadosUsuario =
-                    await puxarInformacoesUsuarioLogado();
-
+                const dadosUsuario = await puxarInformacoesUsuarioLogado();
                 setUsuario(dadosUsuario);
 
             } catch (error) {
@@ -72,7 +31,7 @@ const Header = () => {
 
         carregarUsuario();
 
-    }, [router.isReady, id]);
+    }, []);
 
     return (
         <>
@@ -82,7 +41,7 @@ const Header = () => {
                     aria-label="Menu principal"
                 >
                     <a
-                        href="#"
+                        href="/login"
                         className={styles.logoLink}
                         aria-label="Página inicial"
                     >
@@ -93,28 +52,14 @@ const Header = () => {
                         />
                     </a>
 
-                    <select className={styles.menuList} value={localSelecionado} onChange={opcaoSelecionada}>
-                        <option value="locais">
-                            <Link href="/lista-local/locais">
-                                Locais
-                            </Link>
-                        </option>
-
-                        {local.map((item) => (
-                            <option
-                                className={styles.option}
-                                key={item.localizacaoID}
-                                value={item.localizacaoID}
-                            >
-                                <Link
-                                    href={`/lista-local/${item.localizacaoID}`}
-                                >
-                                    {item.nomeLocal}
-                                    <i className="fa-solid fa-chevron-down" />
-                                </Link>
-                            </option>
-                        ))}
-                    </select>
+                    
+                    <Link href="/lista-local" className={styles.menuLink}>
+                        Locais
+                     </Link>
+                       
+                    <Link href="/aprovacao" className={styles.menuLink}>
+                        Aprovações
+                    </Link>
 
                     <Link href="/patrimonio-por-sala" className={styles.menuLink}>
                         Patrimônios
@@ -133,8 +78,8 @@ const Header = () => {
                         </button>
 
                         <div className={styles.userInfo}>
-                            <strong>{usuario?.nome}</strong>
-                            <span>{usuario?.email}</span>
+                            <strong key={usuario?.usuarioID}>{usuario?.nome}</strong>
+                            <span key={usuario?.usuarioID}>{usuario?.email}</span>
                         </div>
 
                         <button
